@@ -27,14 +27,14 @@ function Gameboard() {
         gameboardContainer.appendChild(newSquare);
       });
 
-      textScreen.textContent = `Ready for the game, "X" goes first`;
+      textScreen.textContent = `Ready For The Game "X" Goes First`;
 
       const squareElements = document.querySelectorAll(".square");
       squareElements.forEach((el) => {
         el.addEventListener("click", createSymbol);
       });
     } else {
-      textScreen.textContent = "Please add player's name";
+      textScreen.textContent = "Please Add Player's Name";
     }
   };
 
@@ -44,7 +44,7 @@ function Gameboard() {
       gameboardContainer.innerHTML = "";
       player1Name.value = "";
       player2Name.value = "";
-      textScreen.textContent = "New Game, Enter new player's name";
+      textScreen.textContent = "New Game: Enter New player's Name";
       gameOver = false; // Reset game over flag
 
       // Remove event listeners after resetting
@@ -54,6 +54,18 @@ function Gameboard() {
       });
     });
   };
+  const playerMsg = () => {
+    let firstPlayer = player1Name.value || "Player 1"; 
+    let secondPlayer = player2Name.value || "Player 2";
+
+    if (!gameOver) { 
+        if (currentPlayer === "x") {
+            textScreen.textContent = `It's ${firstPlayer}'s Turn`;
+        } else {
+            textScreen.textContent = `It's ${secondPlayer}'s Turn`;
+        }
+    }
+};
 
   const createSymbol = (e) => {
     if (gameOver) return;  // Prevent any actions after the game is over
@@ -68,9 +80,10 @@ function Gameboard() {
       drawSymbol.classList.add(currentPlayer);
 
       gameboard[index] = currentPlayer;
-
+      
       checkWinner();
       currentPlayer = currentPlayer === "x" ? "o" : "x";
+      playerMsg();
     }
   };
 
@@ -93,7 +106,8 @@ function Gameboard() {
         gameboard[a] === gameboard[b] &&
         gameboard[a] === gameboard[c]
       ) {
-        textScreen.textContent = `${gameboard[a]} wins!`;
+        const winnerName = gameboard[a] === "x" ? player1Name.value : player2Name.value;
+        textScreen.textContent = `${winnerName} Wins!`;
         gameOver = true; 
         return;
       }
@@ -101,7 +115,7 @@ function Gameboard() {
 
    
     if (!gameboard.includes("")) {
-      textScreen.textContent = "It's a draw!";
+      textScreen.textContent = "It's A Draw!";
       gameOver = true; 
     }
   };
